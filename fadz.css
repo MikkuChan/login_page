@@ -1,0 +1,184 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  letter-spacing: 1px;
+  background: radial-gradient(circle at top, #141833, #0c1022 70%);
+  color: #ffd700;
+}
+
+/* Alert */
+.alert-message {
+  font-weight: 400;
+  border: 0;
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+.warning {
+  background: rgba(0, 250, 154, 0.15) !important;
+  border: 1px solid #00fa9a;
+  color: #00fa9a;
+  backdrop-filter: blur(6px);
+}
+
+/* Container Login */
+.login_form_container {
+  position: relative;
+  width: 380px;
+  height: 400px;
+  max-width: 380px;
+  max-height: 400px;
+  background: #0c1022;
+  border-radius: 30px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(0, 250, 154, 0.25);
+}
+
+/* Border Animasi */
+.login_form_container::before,
+.login_form_container::after {
+  position: absolute;
+  width: 170%;
+  height: 170%;
+  content: "";
+  border-radius: 50%;
+  animation: rotate_border 6s linear infinite;
+}
+.login_form_container::before {
+  background-image: conic-gradient(transparent, transparent, #ffd700);
+}
+.login_form_container::after {
+  background-image: conic-gradient(transparent, transparent, #00fa9a);
+  animation-delay: -3s;
+}
+
+@keyframes rotate_border {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Form Login */
+.login_form {
+  position: absolute;
+  inset: 5px;
+  background: #0c1022;
+  border-radius: 25px 8px;
+  padding: 40px 35px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+/* Input */
+.input_group {
+  margin-top: 25px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.input_text {
+  width: 100%;
+  height: 35px;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-bottom: 2px solid #00fa9a;
+  font-size: 16px;
+  color: #00fa9a;
+  transition: all 0.3s ease;
+}
+.input_text:focus {
+  border-color: #ffd700;
+  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.25);
+}
+::placeholder {
+  font-size: 15px;
+  color: #ffd700;
+  opacity: 0.7;
+}
+
+/* Icon */
+.fa {
+  font-size: 18px;
+  color: #ffd700;
+}
+
+/* Tombol Login */
+#login_button {
+  width: 100%;
+  height: 45px;
+  margin-top: 35px;
+}
+#login_button input[type=submit] {
+  width: 100%;
+  height: 100%;
+  font-size: 18px;
+  letter-spacing: 2px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  background: linear-gradient(45deg, #ffd700, #f7a600);
+  color: #040717;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+#login_button input[type=submit]:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.55);
+  transform: translateY(-2px);
+}
+#login_button input[type=submit]:active {
+  transform: translateY(0);
+}
+
+/* Footer */
+.fotter {
+  margin-top: 15px;
+  text-align: center;
+}
+.fotter a {
+  font-size: 14px;
+  color: #00fa9a;
+  transition: color 0.3s ease;
+}
+.fotter a:hover {
+  color: #ffd700;
+}
+
+/* Tombol Reset */
+input[type=reset] {
+  font-size: 14px;
+  background: #555;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  margin-top: 10px;
+  transition: background 0.3s ease;
+}
+input[type=reset]:hover {
+  background: #777;
+}
