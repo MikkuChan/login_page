@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>fadzWRT</title>
+
+  <!-- Optional: stylesheet eksternal kamu -->
+  <link rel="stylesheet" href="<%=media%>/fadz.css">
+  <link rel="shortcut icon" href="<%=media%>/favicon.ico">
+
+  <style>
+    :root{
+      --bg: #0b0f1a;
+      --card: rgba(18,22,33,0.75);
+      --muted: #a8b3cf;
+      --text: #e6e9f2;
+      --accent: #6ee7ff;       /* biru-cyan */
+      --accent-2: #a78bfa;     /* violet */
+      --danger: #ffce56;       /* kuning amber untuk warning */
+      --ring: rgba(110,231,255,.45);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --speed: .25s;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font: 500 15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 100% -10%, #1b2847 0%, transparent 60%),
+        radial-gradient(1000px 500px at -10% 110%, #12243a 0%, transparent 60%),
+        var(--bg);
+      display:grid; place-items:center;
+      padding:24px;
+    }
+
+    .container{
+      width:min(480px, 100%);
+    }
+
+    .card{
+      position:relative;
+      background:var(--card);
+      backdrop-filter: blur(10px);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px 24px 24px;
+      overflow:hidden;
+    }
+
+    /* dekor garis gradien halus di atas kartu */
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        linear-gradient(120deg, rgba(110,231,255,.12), transparent 30%, transparent 70%, rgba(167,139,250,.12));
+      pointer-events:none;
+      mask: linear-gradient(#000, transparent 60%);
+    }
+
+    .title{
+      margin:0 0 6px;
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size:28px;
+      line-height:1.2;
+      display:flex; align-items:center; gap:10px;
+    }
+    .badge{
+      font-size:12px; font-weight:700;
+      color:#031318; background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      padding:4px 8px; border-radius:999px;
+    }
+
+    .sub{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:13px;
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+    }
+    .sub b{color:var(--text); font-weight:700}
+
+    .alert{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px 14px; border-radius:12px;
+      border:1px solid rgba(255,206,86,.4);
+      background:linear-gradient(180deg, rgba(255,206,86,.12), rgba(255,206,86,.06));
+      color:#fff; margin:0 0 14px;
+      animation: appear .25s ease-out both;
+    }
+    .alert svg{flex:0 0 18px}
+    @keyframes appear{from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:translateY(0)}}
+
+    .field{position:relative; margin:12px 0}
+    .label{
+      display:block; font-size:12px; color:var(--muted); margin:0 0 6px;
+      letter-spacing:.15px;
+    }
+    .control{
+      position:relative;
+      display:flex; align-items:center;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:12px;
+      transition:border var(--speed), box-shadow var(--speed), background var(--speed), transform var(--speed);
+    }
+    .control:focus-within{
+      border-color: var(--accent);
+      box-shadow:0 0 0 6px var(--ring);
+      background:rgba(255,255,255,.06);
+      transform: translateY(-1px);
+    }
+    .icon{
+      width:18px;height:18px; margin-left:12px; opacity:.9;
+    }
+    .input{
+      flex:1; background:transparent; border:0; color:var(--text);
+      padding:14px 14px; font-size:15px; outline:none;
+    }
+    .input::placeholder{color:#9aa6bf}
+
+    .actions{margin-top:18px; display:flex; gap:10px; justify-content:center}
+    .btn{
+      appearance:none; border:0; cursor:pointer;
+      padding:12px 18px; min-width:140px;
+      border-radius:12px; font-weight:800; letter-spacing:.3px;
+      color:#051018; background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      transition: transform var(--speed), box-shadow var(--speed), filter var(--speed);
+      box-shadow:0 8px 20px rgba(110,231,255,.18);
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn:active{transform: translateY(0)}
+    .meta{
+      margin-top:16px; color:var(--muted); text-align:center; font-size:12px;
+    }
+
+    /* kecilkan di layar sempit */
+    @media (max-width:380px){
+      .title{font-size:24px}
+      .btn{min-width:120px; padding:11px 16px}
+    }
+  </style>
+</head>
+
+<body>
+  <form method="post" action="<%=pcdata(FULL_REQUEST_URI)%>">
+    <div class="container">
+      <div class="card" role="region" aria-labelledby="title">
+        <h1 id="title" class="title">
+          fadzWRT <span class="badge">LOGIN</span>
+        </h1>
+
+        <p class="sub">
+          <span id="tanggal-lengkap"></span> • <b id="jam">00:00:00</b>
+        </p>
+
+        <!-- ALERT: salah username/password -->
+        <%- if fuser then %>
+          <div class="alert" id="warning-alert" role="alert" aria-live="assertive">
+            <!-- ikon warning -->
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 8v5m0 3h.01M10.2 3.6 1.7 18.4A1.8 1.8 0 0 0 3.3 21h17.4a1.8 1.8 0 0 0 1.6-2.6L13.8 3.6a1.8 1.8 0 0 0-3.6 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div>
+              <strong>Username atau sandi salah.</strong><br>
+              Coba lagi dengan kredensial yang benar.
+            </div>
+          </div>
+        <%- end -%>
+
+        <!-- USERNAME -->
+        <div class="field">
+          <label class="label" for="username">Username</label>
+          <div class="control">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm7 9a7 7 0 0 0-14 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input id="username" class="input" type="text" name="luci_username" placeholder="Masukkan username"
+                   autocomplete="username" value="<%=duser%>">
+          </div>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="field">
+          <label class="label" for="password">Password</label>
+          <div class="control">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 10V8a6 6 0 1 1 12 0v2M6 10h12v9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-9Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input id="password" class="input" type="password" name="luci_password"
+                   placeholder="Masukkan password" autocomplete="current-password">
+          </div>
+        </div>
+
+        <div class="actions">
+          <input class="btn" type="submit" value="<%:Login%>">
+        </div>
+
+        <div class="meta" aria-hidden="true">
+          © <span id="year"></span> fadzWRT • Aman, cepat, sederhana
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script>
+    // Jam & tanggal (lokal)
+    function updateTime(){
+      const n=new Date();
+      const hh=String(n.getHours()).padStart(2,'0');
+      const mm=String(n.getMinutes()).padStart(2,'0');
+      const ss=String(n.getSeconds()).padStart(2,'0');
+      const el=document.getElementById('jam'); if(el) el.textContent=`${hh}:${mm}:${ss}`;
+    }
+    function setDate(){
+      const h=["Minggu","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+      const b=["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+      const d=new Date();
+      const tgl=`${h[d.getDay()]}, ${d.getDate()} ${b[d.getMonth()]} ${d.getFullYear()}`;
+      const el=document.getElementById('tanggal-lengkap'); if(el) el.textContent=tgl;
+      const y=document.getElementById('year'); if(y) y.textContent=d.getFullYear();
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+      setDate(); updateTime(); setInterval(updateTime,1000);
+
+      // Auto-fade alert
+      const alertEl=document.getElementById('warning-alert');
+      if(alertEl){
+        setTimeout(()=>{ alertEl.style.transition='opacity .25s ease'; alertEl.style.opacity='0';
+          setTimeout(()=> alertEl.remove(), 260);
+        }, 2800);
+      }
+
+      // Fokus ke password setelah 600ms
+      setTimeout(()=>{
+        const pw=document.getElementById('password'); if(pw) pw.focus();
+      }, 600);
+    });
+  </script>
+
+  <%  -- redirect ke HTTPS bila tersedia
+    local uci = require "luci.model.uci".cursor()
+    local fs = require "nixio.fs"
+    local https_key = uci:get("uhttpd", "main", "key")
+    local https_port = uci:get("uhttpd", "main", "listen_https")
+    if type(https_port) == "table" then https_port = https_port[1] end
+    if https_port and fs.access(https_key) then https_port = https_port:match("(%d+)$") %>
+    <script>
+      (function(){
+        if(location.protocol!=='https:'){
+          const url=`https://${location.hostname}:<%=https_port%>${location.pathname}`;
+          // preflight image untuk cek TLS up, lalu redirect
+          const img=new Image();
+          img.onload=()=>location.replace(url);
+          img.onerror=()=>{}; // diam kalau gagal (biar user tetap bisa login via http)
+          img.src=`https://${location.hostname}:<%=https_port%>/<%=resource%>/icons/loading.gif?`+Math.random();
+          setTimeout(()=>{ /* fallback diam */ }, 240);
+        }
+      })();
+    </script>
+  <% end %>
+
+  <script src="login.js"></script>
+</body>
+</html>
